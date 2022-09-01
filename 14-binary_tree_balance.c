@@ -9,31 +9,42 @@
 
 int binary_tree_balance(const binary_tree_t *tree)
 {
-	int sum = 0;
 	int leftHeight = 0, rightHeight = 0;
 
 	if (tree == NULL)
+		return (0);
+	if (!tree->left && !tree->right)
 		return (0);
 
 	leftHeight = binary_tree_balance(tree->left);
 	rightHeight = binary_tree_balance(tree->right);
 
-
-	sum = leftHeight + rightHeight;
-
+	/* when we get to parent we dont add or take */
 	if (tree->parent == NULL)
-		return (sum);
-	if (tree->left && !tree->right)
-		return (sum - 1);
-	if (!tree->left && tree->right)
-		return (sum - 1);
+	{
+		if (leftHeight > rightHeight)
+			return (leftHeight);
+		else
+			return (rightHeight);
+	}
 
-	if (tree->left || tree->right)
+	/** when balanced we just count the height as usual */
+	if (tree->left && tree->right)
 	{
 		if (leftHeight > rightHeight)
 			return (leftHeight + 1);
 		else
 			return (rightHeight + 1);
 	}
+
+	/** when not balances we dont add, we take 1 */
+	else
+	{
+		if (leftHeight > rightHeight)
+			return (leftHeight - 1);
+		else
+			return (rightHeight - 1);
+	}
+
 	return (0);
 }
